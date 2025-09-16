@@ -1,63 +1,60 @@
 "use client"
 
-import type React from "react"
-
+import CategoryCard from "@/components/card/category"
+import InfluencerGridCard from "@/components/card/influencer"
+import PackageCard from "@/components/card/package"
+import TestimonialCarousel from "@/components/testimonial"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { allCategories, carouselSlides, Category, influencerData } from "@/dummy"
+import { motion, useMotionValue } from "framer-motion"
 import {
   ChevronLeft,
   ChevronRight,
   Facebook,
-  Film,
-  Headphones,
   House,
   Instagram,
   LayoutGrid,
   Menu,
   MessageCircle,
   Music2,
-  Plane,
-  Play,
   Search,
-  Star,
   User,
-  Video,
-  Zap,
-  Camera,
-  Gamepad2,
-  Heart,
-  ShoppingBag,
-  Utensils,
-  Dumbbell,
+  Zap
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useRef, useState, useMemo } from "react"
-import { motion, useMotionValue } from "framer-motion"
-import PackageCard from "@/components/card/package"
-import InfluencerGridCard from "@/components/card/influencer"
-import CategoryCard from "@/components/card/category"
-import { allCategories, carouselSlides, Category, influencerData } from "@/dummy"
+import { useEffect, useMemo, useRef, useState } from "react"
 
 export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [showAllCategories, setShowAllCategories] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const x = useMotionValue(0)
-  
+
   useEffect(() => {
     setIsMounted(true)
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % carouselSlides.length)
     }, 4000)
-    return () => clearInterval(timer)
+
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024)
+    }
+
+    handleResize()
+    window.addEventListener("resize", handleResize)
+
+    return () => {
+      clearInterval(timer)
+      window.removeEventListener("resize", handleResize)
+    }
   }, [])
 
   const displayedCategories: Category[] = useMemo(() => {
-    if (!isMounted) return allCategories.slice(0, 6) // Default fallback
-
-    const isDesktop = window.innerWidth >= 1024
+    if (!isMounted) return allCategories.slice(0, 6)
 
     if (isDesktop || showAllCategories) {
       return allCategories
@@ -76,7 +73,7 @@ export default function HomePage() {
         isShowAll: true,
       },
     ]
-  }, [showAllCategories, isMounted])
+  }, [showAllCategories, isMounted, isDesktop])
 
   const getDragConstraints = () => {
     if (!containerRef.current) return { left: 0, right: 0 }
@@ -338,57 +335,36 @@ export default function HomePage() {
       {/* Testimonials Section */}
       <div className="px-4 lg:px-8 py-8 lg:py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-xl lg:text-3xl font-semibold text-gray-800 mb-6 lg:mb-12 text-center">
-            Apa kata mereka tentang Dapur Buzzer?
-          </h2>
-
-          <div className="bg-white rounded-xl p-6 lg:p-8 shadow-sm">
-            <div className="flex items-start gap-4 lg:gap-6 mb-4 lg:mb-6">
-              <Image
-                src="/lucy-juliana-wagey-influencer-profile.jpg"
-                alt="Lucy Juliana Wagey"
-                width={60}
-                height={60}
-                className="lg:w-20 lg:h-20 rounded-full object-cover"
-              />
-              <div>
-                <div className="flex items-center gap-1 mb-1 lg:mb-2">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star key={star} className="w-4 h-4 lg:w-5 lg:h-5 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-                <h3 className="font-semibold text-gray-800 text-base lg:text-lg">Lucy Juliana Wagey</h3>
-                <p className="text-gray-500 text-sm lg:text-base">Influencer</p>
-              </div>
-            </div>
-
-            <p className="text-gray-700 text-sm lg:text-base leading-relaxed italic mb-4 lg:mb-6">
-              Dapur buzzer memiliki pelayanan yang sangat baik dan informasi yang sangat detail dalam menyampaikan brief
-              jika kurang dimengerti, semenjak bergabung dengan dapur buzzer saya kebanjiran endorse dan paidpromote.
-            </p>
-
-            <div className="text-center">
-              <div className="text-6xl lg:text-8xl text-purple-600 mb-4">"</div>
-            </div>
-          </div>
-
-          <div className="flex justify-center mt-6 lg:mt-8">
-            <div className="w-2 h-2 lg:w-3 lg:h-3 bg-purple-600 rounded-full"></div>
-          </div>
+            
+          <TestimonialCarousel/>
 
           {/* App Download Section */}
           <div className="text-center mt-12 lg:mt-20">
             <div className="w-20 h-20 lg:w-32 lg:h-32 rounded-2xl mx-auto mb-4 lg:mb-6 flex items-center justify-center">
-              <Image src="/AVADAPUR_02.jpg" alt="logo" width={200} height={200} className="rounded-2xl" />
+              <Image
+                src="/AVADAPUR_02.jpg"
+                alt="logo"
+                width={200}
+                height={200}
+                className="rounded-2xl"
+              />
             </div>
-            <h3 className="text-xl lg:text-3xl font-semibold text-gray-800 mb-2 lg:mb-4">Dapur Buzzer Indonesia</h3>
+            <h3 className="text-xl lg:text-3xl font-semibold text-gray-800 mb-2 lg:mb-4">
+              Dapur Buzzer Indonesia
+            </h3>
             <p className="text-gray-500 text-sm lg:text-base mb-6 lg:mb-8">
               Influencer & KOL Management Platform Indonesia
             </p>
 
             <div className="flex justify-center gap-4 lg:gap-6 mb-8 lg:mb-12">
               <div>
-                <Image src="/logo-appstore.png" alt="Apple Store" width={130} height={50} className="lg:w-50 lg:h-16" />
+                <Image
+                  src="/logo-appstore.png"
+                  alt="Apple Store"
+                  width={130}
+                  height={50}
+                  className="lg:w-50 lg:h-16"
+                />
               </div>
               <div>
                 <Image
