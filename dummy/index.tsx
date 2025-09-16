@@ -142,7 +142,28 @@ export const influencerData = [
     name: "Maya Indira",
     username: "mayaindira_",
     followers: "52.8K Followers",
-    image: "/maya-indira-influencer.jpg",
+    image: "/maya-indira-influencer.png",
     recommended: true,
+  },
+]
+
+export const testimonials = [
+  {
+    name: "Lucy Juliana Wagey",
+    role: "Influencer",
+    image: "/lucy-juliana-wagey-influencer-profile.jpg",
+    text: "Dapur buzzer memiliki pelayanan yang sangat baik dan informasi yang sangat detail...",
+  },
+  {
+    name: "Santi Septiani",
+    role: "Influencer",
+    image: "/santi-septiani-influencer-in-hijab.jpg",
+    text: "Pelayanan sangat ramah dan membantu banget untuk brand kecil seperti saya...",
+  },
+  {
+    name: "Dwi Mila Sari",
+    role: "Content Creator",
+    image: "/dwi-mila-sari-influencer-in-beige-hijab.jpg",
+    text: "Semenjak ikut dapur buzzer, aku bisa dapat lebih banyak project paid promote...",
   },
 ]
